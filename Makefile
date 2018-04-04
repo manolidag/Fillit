@@ -6,29 +6,34 @@
 #    By: emgounto <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/07 14:40:27 by emgounto          #+#    #+#              #
-#    Updated: 2018/03/20 13:08:17 by efriedma         ###   ########.fr        #
+#    Updated: 2018/04/04 00:26:42 by emgounto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FLAG = -Wall -Wextra -Werror
 
-NAME = fillit.a
+NAME = fillit
 
-SRC = error.c side_check.c read_file.c check_validity.c struct.c place_tetri.c  makelink.c
+LIBFT := libft/
+
+SRC = srcs/isinbounds.c srcs/side_check.c srcs/read_file.c srcs/check_validity.c
+SRC += srcs/place_tetri.c srcs/makelink.c srcs/transform.c srcs/freemap.c
+
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	@$(MAKE) -C $(LIBFT)
+	gcc $(OBJ) -L. libft/libft.a srcs/main.c -o fillit
 
 %.o: %.c
-	@gcc $(FLAG) -c $< -o $@
+	gcc $(FLAG) -c $< -o $@
 
 clean:
 	@rm -f $(OBJ)
+	@$(MAKE) -C $(LIBFT) fclean
 
 fclean: clean
 	@rm -f $(NAME)
